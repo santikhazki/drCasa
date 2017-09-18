@@ -1,0 +1,91 @@
+import enfermedadAutoinmune.*
+import enfermedadInfecciosa.*
+import persona.*
+import medico.*
+
+describe "group of tests" {
+	
+	var malaria1
+	var otitis
+	var lupus
+	var malaria2
+	var logan
+	var frank
+	var santi
+	
+	fixture {
+		 malaria1 = new EnfermedadInfecciosa("Malaria 1",500)
+		 otitis = new EnfermedadInfecciosa("Otitis",100)
+		 lupus = new EnfermedadAutoinmune("Lupus",10000)
+		 malaria2 = new EnfermedadInfecciosa("Malaria 2",800)
+		
+		logan = new Persona(3000000,36,#{malaria1,otitis,lupus})
+		frank = new Persona(3500000,36,#{})
+		
+		santi = new Medico (0,null)
+	}
+	test "hago que Frank contraiga una malaria de 800 celuas" {
+
+		frank.enfermarse(malaria2)
+		
+		assert.that(frank.enfermedades().contains(malaria2))
+
+	}
+	
+	test "hago que la malaria que contrajo Logan se reproduzca" {
+
+		malaria1.reproducirseASiMisma()
+		
+		assert.equals(1000,malaria1.cantidadDeCelulasQueAmenaza())
+
+	}
+	
+	test "me fijo la enfermedad de Logan que mas celulas le afecta"{
+		
+		logan.pasarUnDia()
+		
+		assert.equals(lupus,logan.laEnfermedadQueMasCelulasAfecta())	
+	}
+	
+	test "la cantidad de células afectadas de Logan que estén afectadas por enfermedades agresivas."{
+		
+		logan.pasarUnDia()
+		assert.equals(0,logan.cantidadDeCelulasQueAfectanLasEnfermedadesAgresivas())
+	}
+	
+	test "hago que Logan pase 31 dias y me fijo la enfermedad que mas celulas le afecte"{
+		
+		31.times{logan.pasarUnDia()}
+		assert.equals(lupus,logan.laEnfermedadQueMasCelulasAfecta())
+	}
+	
+	test "hago que Logan pase 31 dias y me fijo la cant de celulas afectadas por enfermedades agresivas"{
+		
+		31.times{logan.pasarUnDia()}
+		assert.equals(10000,logan.cantidadDeCelulasQueAfectanLasEnfermedadesAgresivas())
+	}
+	
+	test "hago que malaria se atenue en 100"{
+		
+		santi.cantMedicamentoSuministrado(100/15,null)
+		
+		santi.atenuarEnfermedad(malaria1)
+		
+		assert.equals({numero => numero.between(399,401)},malaria1.cantidadDeCelulasQueAmenaza())
+	}
+	
+	test "hago que lupus se atenue en 500"{
+		
+		santi.cantMedicamentoSuministrado(500/15,null)
+		
+		santi.atenuarEnfermedad(lupus)
+		
+		assert.equals(9500,lupus.cantidadDeCelulasQueAmenaza())
+	}
+		
+	
+	
+	
+	
+	
+}
