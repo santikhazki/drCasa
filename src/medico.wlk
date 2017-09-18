@@ -8,7 +8,7 @@ class Medico {
 	
 	constructor(cantidad,subordinado){
 		cantMedicamentoSuministrado = cantidad
-		medicoSubordinado = subordinado
+		medicoSubordinado = subordinado //sdsdsdssfsdf
 	}
 	
 	method cantMedicamentoSuministrado(unValor){
